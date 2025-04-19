@@ -4,8 +4,19 @@ import Input from '../components/Input'
 import Button from '../components/Button'
 import { useDispatch } from 'react-redux'
 import { login } from '../features/AuthSlice'
+import { LoginTypes } from '../types/TYPES'
+import * as yup from "yup"
 const Login = () => {
     const disPatch = useDispatch()
+    const initialValues: LoginTypes = {
+        email: "",
+        password: "",
+        token: ""
+    }
+    const validationSchema = yup.object({
+        email: Yup.string().email('Invalid email').required('Required'),
+        password: Yup.string().min(6, 'Minimum 6 characters').required('Required'),
+    })
     const handleLogin = (values: { email: string; password: string, token: string }) => {
         console.log(values, 'vvvv')
         disPatch(login(values))
@@ -16,11 +27,8 @@ const Login = () => {
                 <h2 className="text-3xl font-bold text-center text-blue-700 mb-6">Welcome Back</h2>
 
                 <Formik
-                    initialValues={{ email: '', password: '', token: '' }}
-                    validationSchema={Yup.object({
-                        email: Yup.string().email('Invalid email').required('Required'),
-                        password: Yup.string().min(6, 'Minimum 6 characters').required('Required'),
-                    })}
+                    initialValues={initialValues}
+                    validationSchema={validationSchema}
                     onSubmit={handleLogin}
                 >
                     <Form>
