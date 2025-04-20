@@ -3,6 +3,7 @@ import * as yup from "yup";
 import { Form, Formik } from 'formik';
 import Input from '../components/Input';
 import Button from '../components/Button';
+import AxiosInstance from '../utils/axiosINstance';
 function Register() {
 
   const initialValues: RegisterProps = {
@@ -17,8 +18,17 @@ function Register() {
     pincode: yup.string().required("Pincode is required"),
     password: yup.string().required("Password is required"),
   })
-  const submit = () => {
-
+  const submit = (values: { email: string, address: string, pincode: number, password: string }) => {
+    const { email, address, pincode, password } = values
+    const data = {
+      email: email,
+      address: address,
+      picode: pincode,
+      password: password
+    }
+    AxiosInstance.post("/register", data)
+      .then(() => alert("USER REGISTERD"))
+      .catch(err => console.log(err))
   }
   return (
     <Formik
